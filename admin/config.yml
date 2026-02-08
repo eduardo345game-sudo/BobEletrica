@@ -1,0 +1,12 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "assets/img" # Onde as fotos vãos ficar guardadas
+collections:
+  - name: "galeria"
+    label: "Minha Galeria"
+    folder: "galeria"
+    create: true
+    fields:
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Foto do Serviço", name: "image", widget: "image"}
