@@ -1,12 +1,18 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: "assets/img" # Onde as fotos vãos ficar guardadas
+
+media_folder: "assets/img" # Onde as fotos do celular vão cair
+public_folder: "/assets/img"
+
 collections:
-  - name: "galeria"
-    label: "Minha Galeria"
-    folder: "galeria"
+  - name: "servicos"
+    label: "Nossos Serviços"
+    folder: "galeria" # Ele vai criar uma pasta 'galeria' para organizar
     create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - {label: "Título", name: "title", widget: "string"}
-      - {label: "Foto do Serviço", name: "image", widget: "image"}
+      - {label: "Título do Serviço", name: "title", widget: "string"}
+      - {label: "Data", name: "date", widget: "datetime"}
+      - {label: "Foto do Trabalho", name: "featuredImage", widget: "image"}
+      - {label: "Descrição Curta", name: "body", widget: "markdown"}
