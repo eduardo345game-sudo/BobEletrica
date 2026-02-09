@@ -3,105 +3,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Administrativo | Bob Elétrica</title>
+    <title>Painel Bob Elétrica ⚡</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    
     <style>
-        :root {
-            --amarelo: #edcc29;
-            --preto-bg: #161618;
-            --cinza-form: #2a2a2d;
-        }
+        /* CSS BLINDADO - MODO ESCURO TOTAL */
+        :root { --amarelo: #edcc29; --preto: #161618; }
 
-        /* --- FUNDO IGUAL AO ORÇAMENTO --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--preto-bg); 
-            background-image: radial-gradient(
-                circle at var(--x, 50%) var(--y, 50%), 
-                rgba(237, 204, 41, 0.1) 0%, 
-                rgba(22, 22, 24, 0) 25% 
-            );
-            margin: 0;
-            min-height: 100vh;
-            color: white;
-        }
-
-        /* --- RAIOS ANIMADOS --- */
-        .thunderbolt-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; overflow: hidden;
-        }
-        .thunderbolt { position: absolute; width: 100px; height: 100px; opacity: 0; }
-        .thunderbolt svg path { fill: none; stroke: var(--amarelo); stroke-width: 3px; filter: drop-shadow(0 0 5px var(--amarelo)); }
-        .animate { animation: lightning 1.5s forwards; }
-        @keyframes lightning { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
-
-        /* --- ESTILIZANDO O CMS PARA FICAR DARK --- */
-        #nc-root [class*="AppHeaderBar"] { background-color: rgba(0,0,0,0.8) !important; backdrop-filter: blur(10px); }
-        #nc-root [class*="AppLayoutContent"] { background: transparent !important; z-index: 10; position: relative; }
+        /* Força o fundo e remove o branco das imagens que você mandou */
+        body, #nc-root { background-color: var(--preto) !important; }
         
-        /* Cards de Serviços */
-        #nc-root [class*="Card"] {
-            background: rgba(42, 42, 45, 0.9) !important;
-            border-radius: 20px !important;
-            border: 1px solid rgba(237, 204, 41, 0.2) !important;
-            backdrop-filter: blur(12px) !important;
-            color: white !important;
+        /* Mata o fundo cinza claro e coloca o degradê de raios */
+        #nc-root [class*="AppLayoutContent"], #nc-root [class*="CollectionContainer"] {
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(237, 204, 41, 0.15) 0%, rgba(22, 22, 24, 0) 50%) !important;
+            background-color: var(--preto) !important;
         }
 
-        /* Botões Estilo Bob */
+        /* Estiliza os cards brancos da imagem 328954.png */
+        #nc-root [class*="Card"], #nc-root [class*="SidebarContainer"], #nc-root [class*="Table"] {
+            background-color: #2a2a2d !important;
+            color: white !important;
+            border: 1px solid rgba(237, 204, 41, 0.3) !important;
+        }
+
+        /* Botão Novo Serviço */
         #nc-root button[class*="nc-button"] {
             background: var(--amarelo) !important;
-            color: var(--preto-bg) !important;
-            border-radius: 12px !important;
-            font-weight: 800 !important;
+            color: black !important;
+            font-weight: 900 !important;
             text-transform: uppercase !important;
         }
 
-        /* Esconder o que sobrar de branco */
-        #nc-root [class*="SidebarContainer"] { background: rgba(22, 22, 24, 0.8) !important; }
+        /* RAIOS ANIMADOS */
+        .thunderbolt-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+        .thunderbolt { position: absolute; opacity: 0; animation: flash 2s infinite; }
+        .thunderbolt svg path { stroke: var(--amarelo); stroke-width: 4; fill: none; filter: drop-shadow(0 0 8px var(--amarelo)); }
+        @keyframes flash { 0%, 100% { opacity: 0; } 10%, 20% { opacity: 1; } }
     </style>
 </head>
 <body>
     <div class="thunderbolt-container" id="thunderboltContainer"></div>
-
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
     <script>
-        // 1. Efeito do Mouse
-        const body = document.querySelector('body');
+        // TRADUÇÃO COMPLETA
+        window.CMS_LOCALE = 'pt';
+        
+        // EFEITO DO MOUSE
         window.addEventListener('mousemove', e => {
-            body.style.setProperty('--x', e.clientX + 'px');
-            body.style.setProperty('--y', e.clientY + 'px');
+            document.body.style.setProperty('--x', e.clientX + 'px');
+            document.body.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // 2. Tradução para Português
-        window.CMS_LOCALE = 'pt';
-
-        // 3. Lógica dos Raios (Igual à que você me enviou)
-        const thunderboltContainer = document.getElementById('thunderboltContainer');
-        function createThunderbolt() {
-            const thunderboltDiv = document.createElement('div');
-            thunderboltDiv.className = 'thunderbolt';
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            thunderboltDiv.style.cssText = `top: ${y}%; left: ${x}%; transform: scale(${0.5 + Math.random()});`;
-            thunderboltDiv.innerHTML = `<svg viewBox="0 0 100 100"><path d="M 50 0 L 40 40 L 70 40 L 30 100"></path></svg>`;
-            thunderboltContainer.appendChild(thunderboltDiv);
-            setTimeout(() => { thunderboltDiv.classList.add('animate'); }, 10);
-            setTimeout(() => { thunderboltDiv.remove(); }, 2000);
+        // GERADOR DE RAIOS
+        function criarRaio() {
+            const container = document.getElementById('thunderboltContainer');
+            const raio = document.createElement('div');
+            raio.className = 'thunderbolt';
+            raio.style.left = Math.random() * 100 + '%';
+            raio.style.top = Math.random() * 100 + '%';
+            raio.innerHTML = `<svg width="50" height="100"><path d="M 30 0 L 10 40 L 40 40 L 0 100"></path></svg>`;
+            container.appendChild(raio);
+            setTimeout(() => raio.remove(), 2000);
         }
-        setInterval(createThunderbolt, 3000);
-
-        // 4. Redirecionamento Netlify
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
-                }
-            });
-        }
+        setInterval(criarRaio, 3000);
     </script>
 </body>
 </html>
