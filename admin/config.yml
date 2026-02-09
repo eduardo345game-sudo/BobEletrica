@@ -1,15 +1,16 @@
+# Configuração para Bob Elétrica - Vercel
 backend:
   name: git-gateway
-  branch: main
+  branch: main # Certifique-se de que sua branch no GitHub se chama 'main'
 
-media_folder: "assets/img"
-public_folder: "/assets/img"
+media_folder: "assets/img" # Onde as fotos serão salvas
+public_folder: "/assets/img" # Onde o site vai ler as fotos
 
 collections:
   - name: "servicos"
-    label: "Nossos Serviços" # O que aparece no menu lateral
+    label: "Nossos Serviços"
     label_singular: "Serviço"
-    folder: "galeria" # Onde os textos dos serviços são salvos
+    folder: "galeria" # Pasta onde os arquivos de texto dos serviços ficarão
     create: true
     slug: "{{slug}}"
     fields:
