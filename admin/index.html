@@ -6,85 +6,92 @@
     <title>Painel Bob Elétrica ⚡</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
-        /* --- ESTILO BASE (IDÊNTICO AO ORÇAMENTO) --- */
+        /* --- TEMA DARK RAIZ (IDÊNTICO AO ORÇAMENTO) --- */
         :root {
             --amarelo: #edcc29;
             --preto-bg: #161618;
-            --campo-bg: #353538;
+            --vidro: rgba(42, 42, 45, 0.85);
         }
 
         body { 
+            font-family: 'Inter', sans-serif; 
             background-color: var(--preto-bg) !important;
-            margin: 0; font-family: 'Inter', sans-serif;
-            background-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(237, 204, 41, 0.1) 0%, rgba(22, 22, 24, 0) 30%) !important;
+            background-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(237, 204, 41, 0.12) 0%, rgba(22, 22, 24, 0) 35%) !important;
+            margin: 0; color: white; min-height: 100vh;
         }
 
-        /* --- LIMPEZA DO SISTEMA (MATA O BRANCO E O CINZA) --- */
-        #nc-root [class*="AppHeaderBar"] { background: rgba(0,0,0,0.5) !important; backdrop-filter: blur(10px) !important; border: none !important; }
-        #nc-root [class*="AppLayoutContent"] { background: transparent !important; padding-top: 20px !important; }
-        #nc-root [class*="SidebarContainer"] { background: transparent !important; border: none !important; }
-        
-        /* Transforma a lista de serviços em cards simples como o seu form */
-        #nc-root [class*="Card"] {
-            background: rgba(42, 42, 45, 0.9) !important;
-            border-radius: 20px !important;
-            border: 1px solid rgba(237, 204, 41, 0.1) !important;
+        /* --- RAIOS ANIMADOS --- */
+        .thunderbolt-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .thunderbolt { position: absolute; opacity: 0; }
+        .thunderbolt svg path { fill: none; stroke: var(--amarelo); stroke-width: 4; filter: drop-shadow(0 0 8px var(--amarelo)); }
+        .animate-raio { animation: flashRaio 1.5s forwards; }
+        @keyframes flashRaio { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- ESTILIZAÇÃO DO PAINEL (MODO VIDRO) --- */
+        #nc-root [class*="AppHeaderBar"] { 
+            background: rgba(0,0,0,0.6) !important; 
+            backdrop-filter: blur(15px) !important; 
+            border-bottom: 1px solid rgba(237, 204, 41, 0.2) !important;
+        }
+
+        #nc-root [class*="SidebarContainer"], #nc-root [class*="Card"] {
+            background: var(--vidro) !important;
             backdrop-filter: blur(12px) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
             color: white !important;
-            margin-bottom: 15px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
         }
 
-        /* Botão "New Serviço" igual ao botão "Solicitar" */
+        /* Botão "Adicionar" estilo o "SOLICITAR" do orçamento */
         #nc-root button[class*="nc-button"] {
             background: var(--amarelo) !important;
             color: var(--preto-bg) !important;
             border-radius: 14px !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
             text-transform: uppercase !important;
-            padding: 12px 25px !important;
+            transition: 0.3s !important;
             border: none !important;
-            transition: 0.3s;
         }
-        #nc-root button[class*="nc-button"]:hover { transform: scale(1.05); background: white !important; }
+        #nc-root button:hover { transform: scale(1.05); filter: brightness(1.1); }
 
-        /* Esconde textos desnecessários e ícones que poluem */
-        [class*="ControlPaneContainer"] { background: transparent !important; }
-        #nc-root [class*="PaneContainer"] { background: var(--preto-bg) !important; }
-
-        /* RAIOS NO FUNDO */
-        .thunderbolt-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
-        .thunderbolt { position: absolute; opacity: 0; animation: flash 2s infinite; }
-        .thunderbolt svg path { stroke: var(--amarelo); stroke-width: 3; fill: none; filter: drop-shadow(0 0 5px var(--amarelo)); }
-        @keyframes flash { 0%, 100% { opacity: 0; } 10%, 20% { opacity: 0.8; } }
+        /* Esconde elementos brancos residuais */
+        #nc-root [class*="AppLayoutContent"] { background: transparent !important; }
+        #nc-root [class*="CollectionContainer"] { background: transparent !important; }
+        #nc-root span, #nc-root h1, #nc-root h2, #nc-root p { color: white !important; }
     </style>
 </head>
 <body>
+    
     <div class="thunderbolt-container" id="thunderboltContainer"></div>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-        window.CMS_LOCALE = 'pt'; // Força Português
 
-        // Luz seguindo o mouse
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <script>
+        // 1. TRADUÇÃO COMPLETA
+        window.CMS_LOCALE = 'pt';
+
+        // 2. LUZ QUE SEGUE O MOUSE (Igual Orçamento)
         window.addEventListener('mousemove', e => {
             document.body.style.setProperty('--x', e.clientX + 'px');
             document.body.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // Gerador de Raios
-        function criarRaio() {
+        // 3. GERADOR DE RAIOS (Puro Estilo Bob Elétrica)
+        function dispararRaio() {
             const container = document.getElementById('thunderboltContainer');
             const raio = document.createElement('div');
             raio.className = 'thunderbolt';
-            raio.style.left = Math.random() * 100 + '%';
-            raio.style.top = Math.random() * 100 + '%';
-            raio.innerHTML = `<svg width="60" height="120"><path d="M 40 0 L 20 50 L 50 50 L 10 120"></path></svg>`;
+            raio.style.left = Math.random() * 90 + '%';
+            raio.style.top = Math.random() * 90 + '%';
+            raio.innerHTML = `<svg width="80" height="150" viewBox="0 0 100 100"><path d="M 50 0 L 30 45 L 70 45 L 20 100"></path></svg>`;
             container.appendChild(raio);
+            setTimeout(() => raio.classList.add('animate-raio'), 50);
             setTimeout(() => raio.remove(), 2000);
         }
-        setInterval(criarRaio, 3000);
+        setInterval(dispararRaio, 4000); // Um raio a cada 4 segundos
 
-        // Login Netlify
+        // 4. GARANTIR LOGIN APÓS SUSPENSÃO DO NETLIFY
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
                 if (!user) {
