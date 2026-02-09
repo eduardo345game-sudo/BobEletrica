@@ -3,68 +3,105 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Bob Elétrica ⚡</title>
+    <title>Painel Bob Elétrica | Gerenciar</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
-        /* CSS BLINDADO - MODO ESCURO TOTAL */
-        :root { --amarelo: #edcc29; --preto: #161618; }
-
-        /* Força o fundo e remove o branco das imagens que você mandou */
-        body, #nc-root { background-color: var(--preto) !important; }
-        
-        /* Mata o fundo cinza claro e coloca o degradê de raios */
-        #nc-root [class*="AppLayoutContent"], #nc-root [class*="CollectionContainer"] {
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(237, 204, 41, 0.15) 0%, rgba(22, 22, 24, 0) 50%) !important;
-            background-color: var(--preto) !important;
+        :root {
+            --amarelo: #edcc29;
+            --preto-bg: #161618;
+            --cinza-form: #2a2a2d;
+            --campo-bg: #353538;
         }
 
-        /* Estiliza os cards brancos da imagem 328954.png */
-        #nc-root [class*="Card"], #nc-root [class*="SidebarContainer"], #nc-root [class*="Table"] {
-            background-color: #2a2a2d !important;
+        /* --- FUNDO IDÊNTICO AO ORÇAMENTO --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--preto-bg) !important; 
+            background-image: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%), 
+                rgba(237, 204, 41, 0.1) 0%, 
+                rgba(22, 22, 24, 0) 25% 
+            ) !important;
+            margin: 0; color: white; overflow-x: hidden;
+        }
+
+        /* --- RAIOS ANIMADOS --- */
+        .thunderbolt-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .thunderbolt { position: absolute; width: 80px; height: 80px; opacity: 0; }
+        .thunderbolt svg path { fill: none; stroke: var(--amarelo); stroke-width: 3px; filter: drop-shadow(0 0 5px var(--amarelo)); }
+        .animate { animation: lightning 1.5s forwards; }
+        @keyframes lightning { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- MODERNIZAÇÃO DO SISTEMA (ESTILO GLASS) --- */
+        #nc-root [class*="AppHeaderBar"] { 
+            background: rgba(22, 22, 24, 0.7) !important; 
+            backdrop-filter: blur(10px) !important;
+            border-bottom: 1px solid rgba(237, 204, 41, 0.2) !important;
+        }
+
+        #nc-root [class*="AppLayoutContent"] { background: transparent !important; }
+
+        /* Estilo dos Cards (Onde ficam os textos) */
+        #nc-root [class*="Card"], #nc-root [class*="SidebarContainer"] {
+            background: rgba(42, 42, 45, 0.9) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(237, 204, 41, 0.1) !important;
+            backdrop-filter: blur(12px) !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
             color: white !important;
-            border: 1px solid rgba(237, 204, 41, 0.3) !important;
         }
 
-        /* Botão Novo Serviço */
+        /* Botão "New Serviço" (Amarelo Impactante) */
         #nc-root button[class*="nc-button"] {
             background: var(--amarelo) !important;
-            color: black !important;
-            font-weight: 900 !important;
-            text-transform: uppercase !important;
+            color: var(--preto-bg) !important;
+            border-radius: 12px !important;
+            font-weight: 800 !important;
+            border: none !important;
+            padding: 10px 20px !important;
         }
 
-        /* RAIOS ANIMADOS */
-        .thunderbolt-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
-        .thunderbolt { position: absolute; opacity: 0; animation: flash 2s infinite; }
-        .thunderbolt svg path { stroke: var(--amarelo); stroke-width: 4; fill: none; filter: drop-shadow(0 0 8px var(--amarelo)); }
-        @keyframes flash { 0%, 100% { opacity: 0; } 10%, 20% { opacity: 1; } }
+        #nc-root [class*="Table"] { background: transparent !important; color: white !important; }
+        #nc-root span, #nc-root h1, #nc-root h2 { color: white !important; }
     </style>
 </head>
 <body>
     <div class="thunderbolt-container" id="thunderboltContainer"></div>
+
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
     <script>
-        // TRADUÇÃO COMPLETA
-        window.CMS_LOCALE = 'pt';
-        
-        // EFEITO DO MOUSE
+        // 1. Efeito do Mouse (Luz seguindo)
         window.addEventListener('mousemove', e => {
             document.body.style.setProperty('--x', e.clientX + 'px');
             document.body.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // GERADOR DE RAIOS
-        function criarRaio() {
+        // 2. Tradução PT-BR
+        window.CMS_LOCALE = 'pt';
+
+        // 3. Sistema de Raios
+        function createThunderbolt() {
             const container = document.getElementById('thunderboltContainer');
-            const raio = document.createElement('div');
-            raio.className = 'thunderbolt';
-            raio.style.left = Math.random() * 100 + '%';
-            raio.style.top = Math.random() * 100 + '%';
-            raio.innerHTML = `<svg width="50" height="100"><path d="M 30 0 L 10 40 L 40 40 L 0 100"></path></svg>`;
-            container.appendChild(raio);
-            setTimeout(() => raio.remove(), 2000);
+            const div = document.createElement('div');
+            div.className = 'thunderbolt';
+            div.style.left = Math.random() * 100 + '%';
+            div.style.top = Math.random() * 100 + '%';
+            div.innerHTML = `<svg viewBox="0 0 100 100"><path d="M 50 0 L 40 40 L 70 40 L 30 100"></path></svg>`;
+            container.appendChild(div);
+            setTimeout(() => div.classList.add('animate'), 10);
+            setTimeout(() => div.remove(), 2000);
         }
-        setInterval(criarRaio, 3000);
+        setInterval(createThunderbolt, 4000);
+
+        // 4. Redirecionamento Identity
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
+                }
+            });
+        }
     </script>
 </body>
 </html>
