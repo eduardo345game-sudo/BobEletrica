@@ -3,81 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Bob Elétrica | Gerenciar Site</title>
+  <title>Painel Bob Elétrica | Gerenciar</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  
   <style>
-    /* Estilização Dark Raiz para sumir com o branco das imagens */
+    /* CSS PARA DEIXAR TUDO DARK RAIZ */
     :root {
-      --preto-fundo: #121212;
-      --amarelo-bob: #edcc29;
-      --cinza-cards: #1e1e1e;
+      --fundo: #121212;
+      --amarelo: #edcc29;
+      --card: #1e1e1e;
     }
-
-    /* Força o fundo escuro em tudo */
-    body, #nc-root { background-color: var(--preto-fundo) !important; }
-
-    /* Estiliza os botões e textos do menu */
-    #nc-root [class^="nc-app-layout-"], 
-    #nc-root [class^="nc-app-header-"],
-    #nc-root [class^="nc-collection-container-"] {
-      background-color: var(--preto-fundo) !important;
-      color: white !important;
+    body { background-color: var(--fundo) !important; }
+    #nc-root [class*="AppHeaderBar"] { background-color: #000 !important; }
+    #nc-root [class*="CollectionContainer"], #nc-root [class*="AppLayoutContent"] { 
+      background-color: var(--fundo) !important; 
     }
-
-    /* Transforma os cards brancos da sua imagem em cinza escuro */
-    #nc-root [class^="nc-card-"], 
-    #nc-root [class^="nc-table-"],
-    #nc-root [class^="nc-list-card-"] {
-      background-color: var(--cinza-cards) !important;
+    /* Corrigindo os cards brancos da sua foto */
+    #nc-root [class*="Card"], #nc-root [class*="Table"], #nc-root [class*="SidebarContainer"] {
+      background-color: var(--card) !important;
       color: white !important;
       border: 1px solid #333 !important;
     }
-
-    /* Botão "New Nossos Serviços" em Amarelo */
-    #nc-root button[class*="nc-button-"] {
-      background-color: var(--amarelo-bob) !important;
-      color: black !important;
-      font-weight: bold !important;
-    }
-
-    /* Input de busca */
-    #nc-root input {
-      background-color: #2a2a2a !important;
-      color: white !important;
-      border: 1px solid var(--amarelo-bob) !important;
-    }
+    #nc-root [class*="SidebarNavLink"] { color: #ccc !important; }
+    #nc-root [class*="SidebarNavLink"]-active { color: var(--amarelo) !important; }
+    #nc-root h1, #nc-root h2, #nc-root h3, #nc-root span, #nc-root p { color: white !important; }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <script>
-    // CONFIGURAÇÃO DO IDIOMA PT-BR
-    window.CMS_LOCALE = 'pt'; 
-    
-    // Registra a tradução para Português
+    // FORÇANDO TRADUÇÃO COMPLETA PARA PT-BR
+    window.CMS_LOCALE = 'pt';
     CMS.registerLocale('pt', {
-      auth: { login: 'Entrar', loggingIn: 'Entrando...', loginWithNetlifyIdentity: 'Entrar com Netlify Identity', refresh: 'Atualizar' },
-      app: { header: { content: 'Conteúdo', media: 'Mídia', quickAdd: 'Adição rápida' } },
-      collection: { 
-        sidebar: { collections: 'Coleções', searchAll: 'Pesquisar todos' },
+      auth: { login: 'Entrar', loggingIn: 'Entrando...', loginWithNetlifyIdentity: 'Entrar com Netlify Identity' },
+      app: { header: { content: 'Conteúdo', media: 'Mídia', quickAdd: 'Adicionar Rápido' } },
+      collection: {
+        sidebar: { collections: 'Minhas Pastas', searchAll: 'Procurar em tudo' },
         table: { title: 'Título', lastUpdated: 'Última Atualização' },
-        default: { addNew: 'Novo %{name}', write: 'Escrever', preview: 'Visualizar' }
+        default: { addNew: 'Adicionar Novo %{name}' }
       },
-      editor: { editorWidgets: { image: { chooseImg: 'Escolher Imagem' } } }
+      mediaLibrary: { sidebar: { collections: 'Coleções', allMedia: 'Todas as Mídias' }, timeline: { title: 'Linha do Tempo' } }
     });
-
-    // Redirecionamento de Login
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
   </script>
 </body>
 </html>
