@@ -293,9 +293,24 @@ header {
     </div>
 </section>
 
-<!-- Elfsight Instagram Feed | Untitled Instagram Feed -->
-<script src="https://elfsightcdn.com/platform.js" async></script>
-<div class="elfsight-app-e7fe06d2-4f0c-4c32-86b3-bc38281af739" data-elfsight-app-lazy></div>
+<section id="trabalhos" style="padding: 50px 5%; background: #161618;">
+    <h2 style="text-align: center; color: #edcc29; margin-bottom: 40px;">Nossos Serviços Recentes</h2>
+    
+    <div id="lista-servicos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        </div>
+</section>
+
+<script>
+  // Script para buscar as fotos que você postou pelo celular
+  fetch('/galeria/index.json') // O CMS gera um índice ou os arquivos individuais
+    .then(response => response.json())
+    .then(data => {
+       const container = document.getElementById('lista-servicos');
+       // Aqui faríamos um loop para mostrar cada foto postada
+       // Como você acabou de publicar, me confirme se você já vê uma pasta nova 
+       // chamada 'galeria' lá no seu GitHub.
+    });
+</script>
 
 <section class="section" style="background: rgba(237, 204, 41, 0.05);">
     <div style="max-width: 800px; margin: auto; text-align: center;">
@@ -388,4 +403,5 @@ header {
 </script>
 
 </body>
+
 </html>
