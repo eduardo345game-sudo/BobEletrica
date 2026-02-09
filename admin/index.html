@@ -1,52 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Administrativo | Bob Elétrica</title>
+  <title>Painel Bob Elétrica | Gerenciar Site</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  
   <style>
-    /* Customização Premium do Painel */
+    /* Customização para deixar o painel "Raiz" e Dark */
     :root {
-      --amarelo: #edcc29;
-      --preto: #121212;
-      --cinza-card: #1e1e1e;
+      --cor-fundo: #121212;
+      --cor-detalhe: #edcc29; /* O Amarelo do Bob */
+      --cor-texto: #ffffff;
     }
 
-    /* Estilizando a tela de login que o Decap gera */
-    #nc-root [class^="nc-app-layout-"] {
-      background-color: var(--preto) !important;
+    /* Estilizando o carregamento e fundo */
+    body { background-color: var(--cor-fundo) !important; }
+
+    /* Forçando o Dark Mode no CMS */
+    #nc-root [class^="nc-app-layout-"], 
+    #nc-root [class^="nc-app-header-"],
+    #nc-root [class^="nc-collection-container-"] {
+      background-color: var(--cor-fundo) !important;
+      color: var(--cor-texto) !important;
     }
 
-    /* Botões Premium */
+    /* Botões seguindo o padrão do site */
     #nc-root button {
-      background-color: var(--amarelo) !important;
-      color: black !important;
-      font-weight: bold !important;
+      background-color: var(--cor-detalhe) !important;
+      color: #000 !important;
+      font-weight: 800 !important;
       text-transform: uppercase !important;
-      border-radius: 8px !important;
-      transition: transform 0.2s !important;
+      border: none !important;
     }
 
-    #nc-root button:hover {
-      transform: scale(1.05);
-      filter: brightness(1.1);
+    /* Ajuste nas bordas e cards */
+    #nc-root [class^="nc-card-"] {
+      background-color: #1e1e1e !important;
+      border: 1px solid #333 !important;
+      color: white !important;
     }
 
-    /* Ajustes para Mobile */
-    @media (max-width: 600px) {
-      span[class^="nc-app-header-logo"] {
-        font-size: 14px !important;
-      }
+    /* Logo do Bob no topo do Painel */
+    span[class^="nc-app-header-logo"]::after {
+      content: " - PAINEL BOB ELÉTRICA";
+      color: var(--cor-detalhe);
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <script>
-    // Garantir que o login redirecione para o admin após entrar
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
