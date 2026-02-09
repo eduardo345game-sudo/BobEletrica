@@ -1,48 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Bob Elétrica | Gerenciar</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    /* CSS PARA DEIXAR TUDO DARK RAIZ */
-    :root {
-      --fundo: #121212;
-      --amarelo: #edcc29;
-      --card: #1e1e1e;
-    }
-    body { background-color: var(--fundo) !important; }
-    #nc-root [class*="AppHeaderBar"] { background-color: #000 !important; }
-    #nc-root [class*="CollectionContainer"], #nc-root [class*="AppLayoutContent"] { 
-      background-color: var(--fundo) !important; 
-    }
-    /* Corrigindo os cards brancos da sua foto */
-    #nc-root [class*="Card"], #nc-root [class*="Table"], #nc-root [class*="SidebarContainer"] {
-      background-color: var(--card) !important;
-      color: white !important;
-      border: 1px solid #333 !important;
-    }
-    #nc-root [class*="SidebarNavLink"] { color: #ccc !important; }
-    #nc-root [class*="SidebarNavLink"]-active { color: var(--amarelo) !important; }
-    #nc-root h1, #nc-root h2, #nc-root h3, #nc-root span, #nc-root p { color: white !important; }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Administrativo | Bob Elétrica</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
+    <style>
+        :root {
+            --amarelo: #edcc29;
+            --preto-bg: #161618;
+            --cinza-form: #2a2a2d;
+        }
+
+        /* --- FUNDO IGUAL AO ORÇAMENTO --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--preto-bg); 
+            background-image: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%), 
+                rgba(237, 204, 41, 0.1) 0%, 
+                rgba(22, 22, 24, 0) 25% 
+            );
+            margin: 0;
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* --- RAIOS ANIMADOS --- */
+        .thunderbolt-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .thunderbolt { position: absolute; width: 100px; height: 100px; opacity: 0; }
+        .thunderbolt svg path { fill: none; stroke: var(--amarelo); stroke-width: 3px; filter: drop-shadow(0 0 5px var(--amarelo)); }
+        .animate { animation: lightning 1.5s forwards; }
+        @keyframes lightning { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- ESTILIZANDO O CMS PARA FICAR DARK --- */
+        #nc-root [class*="AppHeaderBar"] { background-color: rgba(0,0,0,0.8) !important; backdrop-filter: blur(10px); }
+        #nc-root [class*="AppLayoutContent"] { background: transparent !important; z-index: 10; position: relative; }
+        
+        /* Cards de Serviços */
+        #nc-root [class*="Card"] {
+            background: rgba(42, 42, 45, 0.9) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(237, 204, 41, 0.2) !important;
+            backdrop-filter: blur(12px) !important;
+            color: white !important;
+        }
+
+        /* Botões Estilo Bob */
+        #nc-root button[class*="nc-button"] {
+            background: var(--amarelo) !important;
+            color: var(--preto-bg) !important;
+            border-radius: 12px !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+        }
+
+        /* Esconder o que sobrar de branco */
+        #nc-root [class*="SidebarContainer"] { background: rgba(22, 22, 24, 0.8) !important; }
+    </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    // FORÇANDO TRADUÇÃO COMPLETA PARA PT-BR
-    window.CMS_LOCALE = 'pt';
-    CMS.registerLocale('pt', {
-      auth: { login: 'Entrar', loggingIn: 'Entrando...', loginWithNetlifyIdentity: 'Entrar com Netlify Identity' },
-      app: { header: { content: 'Conteúdo', media: 'Mídia', quickAdd: 'Adicionar Rápido' } },
-      collection: {
-        sidebar: { collections: 'Minhas Pastas', searchAll: 'Procurar em tudo' },
-        table: { title: 'Título', lastUpdated: 'Última Atualização' },
-        default: { addNew: 'Adicionar Novo %{name}' }
-      },
-      mediaLibrary: { sidebar: { collections: 'Coleções', allMedia: 'Todas as Mídias' }, timeline: { title: 'Linha do Tempo' } }
-    });
-  </script>
+    <div class="thunderbolt-container" id="thunderboltContainer"></div>
+
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <script>
+        // 1. Efeito do Mouse
+        const body = document.querySelector('body');
+        window.addEventListener('mousemove', e => {
+            body.style.setProperty('--x', e.clientX + 'px');
+            body.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        // 2. Tradução para Português
+        window.CMS_LOCALE = 'pt';
+
+        // 3. Lógica dos Raios (Igual à que você me enviou)
+        const thunderboltContainer = document.getElementById('thunderboltContainer');
+        function createThunderbolt() {
+            const thunderboltDiv = document.createElement('div');
+            thunderboltDiv.className = 'thunderbolt';
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            thunderboltDiv.style.cssText = `top: ${y}%; left: ${x}%; transform: scale(${0.5 + Math.random()});`;
+            thunderboltDiv.innerHTML = `<svg viewBox="0 0 100 100"><path d="M 50 0 L 40 40 L 70 40 L 30 100"></path></svg>`;
+            thunderboltContainer.appendChild(thunderboltDiv);
+            setTimeout(() => { thunderboltDiv.classList.add('animate'); }, 10);
+            setTimeout(() => { thunderboltDiv.remove(); }, 2000);
+        }
+        setInterval(createThunderbolt, 3000);
+
+        // 4. Redirecionamento Netlify
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
+                }
+            });
+        }
+    </script>
 </body>
 </html>
