@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Bob Elétrica</title>
+  <title>Painel Administrativo | Bob Elétrica</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <style>
+    /* Customização Premium do Painel */
+    :root {
+      --amarelo: #edcc29;
+      --preto: #121212;
+      --cinza-card: #1e1e1e;
+    }
+
+    /* Estilizando a tela de login que o Decap gera */
+    #nc-root [class^="nc-app-layout-"] {
+      background-color: var(--preto) !important;
+    }
+
+    /* Botões Premium */
+    #nc-root button {
+      background-color: var(--amarelo) !important;
+      color: black !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      border-radius: 8px !important;
+      transition: transform 0.2s !important;
+    }
+
+    #nc-root button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    /* Ajustes para Mobile */
+    @media (max-width: 600px) {
+      span[class^="nc-app-header-logo"] {
+        font-size: 14px !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+    // Garantir que o login redirecione para o admin após entrar
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
