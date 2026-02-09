@@ -1,56 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Painel Bob Elétrica | Gerenciar Site</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
   <style>
-    /* Customização para deixar o painel "Raiz" e Dark */
+    /* Estilização Dark Raiz para sumir com o branco das imagens */
     :root {
-      --cor-fundo: #121212;
-      --cor-detalhe: #edcc29; /* O Amarelo do Bob */
-      --cor-texto: #ffffff;
+      --preto-fundo: #121212;
+      --amarelo-bob: #edcc29;
+      --cinza-cards: #1e1e1e;
     }
 
-    /* Estilizando o carregamento e fundo */
-    body { background-color: var(--cor-fundo) !important; }
+    /* Força o fundo escuro em tudo */
+    body, #nc-root { background-color: var(--preto-fundo) !important; }
 
-    /* Forçando o Dark Mode no CMS */
+    /* Estiliza os botões e textos do menu */
     #nc-root [class^="nc-app-layout-"], 
     #nc-root [class^="nc-app-header-"],
     #nc-root [class^="nc-collection-container-"] {
-      background-color: var(--cor-fundo) !important;
-      color: var(--cor-texto) !important;
-    }
-
-    /* Botões seguindo o padrão do site */
-    #nc-root button {
-      background-color: var(--cor-detalhe) !important;
-      color: #000 !important;
-      font-weight: 800 !important;
-      text-transform: uppercase !important;
-      border: none !important;
-    }
-
-    /* Ajuste nas bordas e cards */
-    #nc-root [class^="nc-card-"] {
-      background-color: #1e1e1e !important;
-      border: 1px solid #333 !important;
+      background-color: var(--preto-fundo) !important;
       color: white !important;
     }
 
-    /* Logo do Bob no topo do Painel */
-    span[class^="nc-app-header-logo"]::after {
-      content: " - PAINEL BOB ELÉTRICA";
-      color: var(--cor-detalhe);
-      font-weight: bold;
+    /* Transforma os cards brancos da sua imagem em cinza escuro */
+    #nc-root [class^="nc-card-"], 
+    #nc-root [class^="nc-table-"],
+    #nc-root [class^="nc-list-card-"] {
+      background-color: var(--cinza-cards) !important;
+      color: white !important;
+      border: 1px solid #333 !important;
+    }
+
+    /* Botão "New Nossos Serviços" em Amarelo */
+    #nc-root button[class*="nc-button-"] {
+      background-color: var(--amarelo-bob) !important;
+      color: black !important;
+      font-weight: bold !important;
+    }
+
+    /* Input de busca */
+    #nc-root input {
+      background-color: #2a2a2a !important;
+      color: white !important;
+      border: 1px solid var(--amarelo-bob) !important;
     }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
   <script>
+    // CONFIGURAÇÃO DO IDIOMA PT-BR
+    window.CMS_LOCALE = 'pt'; 
+    
+    // Registra a tradução para Português
+    CMS.registerLocale('pt', {
+      auth: { login: 'Entrar', loggingIn: 'Entrando...', loginWithNetlifyIdentity: 'Entrar com Netlify Identity', refresh: 'Atualizar' },
+      app: { header: { content: 'Conteúdo', media: 'Mídia', quickAdd: 'Adição rápida' } },
+      collection: { 
+        sidebar: { collections: 'Coleções', searchAll: 'Pesquisar todos' },
+        table: { title: 'Título', lastUpdated: 'Última Atualização' },
+        default: { addNew: 'Novo %{name}', write: 'Escrever', preview: 'Visualizar' }
+      },
+      editor: { editorWidgets: { image: { chooseImg: 'Escolher Imagem' } } }
+    });
+
+    // Redirecionamento de Login
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
